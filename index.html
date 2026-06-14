@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SlimEats — The Perfect Scroll-Animated Riceball Experience</title>
+  <meta name="description" content="Experience the art of the perfect riceball. SlimEats brings you premium, healthy, low-calorie Japanese riceballs animated in high-definition 3D scroll-driven sequence.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600&family=Be+Vietnam+Pro:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="/index.css">
+
+  <!-- Tailwind CSS Integration for Appended Sections -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-primary": "#ffb4a9",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f5f3ee",
+            "on-tertiary-container": "#f7fff1",
+            "on-background": "#1b1c19",
+            "on-surface-variant": "#5b403c",
+            "surface-dim": "#dbdad5",
+            "on-primary-container": "#fffbff",
+            "secondary-fixed-dim": "#e9c400",
+            "on-secondary-fixed": "#221b00",
+            "on-tertiary-fixed": "#002204",
+            "on-primary": "#ffffff",
+            "on-secondary-fixed-variant": "#544600",
+            "primary-fixed-dim": "#ffb4a9",
+            "outline": "#8f706b",
+            "primary-container": "#d7392d",
+            "surface-container": "#f0eee9",
+            "on-secondary-container": "#6e5c00",
+            "error": "#ba1a1a",
+            "surface-variant": "#e4e2dd",
+            "tertiary": "#186a22",
+            "on-tertiary": "#ffffff",
+            "secondary-fixed": "#ffe16d",
+            "inverse-surface": "#30312e",
+            "secondary-container": "#fcd400",
+            "surface-container-high": "#eae8e3",
+            "on-primary-fixed-variant": "#930004",
+            "primary-fixed": "#ffdad5",
+            "on-primary-fixed": "#410001",
+            "on-tertiary-fixed-variant": "#005312",
+            "surface-tint": "#b72119",
+            "tertiary-fixed": "#a3f69c",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#e4e2dd",
+            "secondary": "#705d00",
+            "on-error-container": "#93000a",
+            "inverse-on-surface": "#f2f1ec",
+            "tertiary-fixed-dim": "#88d982",
+            "primary": "#b41f17",
+            "surface": "#fbf9f4",
+            "error-container": "#ffdad6",
+            "background": "#fbf9f4",
+            "on-surface": "#1b1c19",
+            "surface-bright": "#fbf9f4",
+            "outline-variant": "#e3beb9",
+            "on-error": "#ffffff",
+            "tertiary-container": "#358438"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-desktop": "64px",
+            "xs": "4px",
+            "gutter": "24px",
+            "sm": "12px",
+            "md": "24px",
+            "xl": "80px",
+            "margin-mobile": "16px",
+            "base": "8px",
+            "lg": "48px"
+          },
+          "fontFamily": {
+            "headline-xl": ["Be Vietnam Pro"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Be Vietnam Pro"],
+            "caption": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "title-md": ["Be Vietnam Pro"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Be Vietnam Pro"]
+          },
+          "fontSize": {
+            "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+            "caption": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background text-on-surface">
+  <!-- Grain overlay for visual texture -->
+  <div class="grain-overlay"></div>
+  <div class="bg-overlay"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Loading Screen -->
+  <div id="loader" class="loader-container">
+    <div class="loader-content">
+      <div class="brand-logo-large">SlimEats</div>
+      <div class="loader-bar-bg">
+        <div id="loader-bar" class="loader-bar-fill"></div>
+      </div>
+      <div id="loader-text" class="loader-status-text">Preparing ingredients... 0%</div>
+    </div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand-logo">SlimEats</a>
+      <nav class="nav-links">
+        <a href="#hero">Intro</a>
+        <a href="#ingredients">Ingredients</a>
+        <a href="#nutrients">Nutrition</a>
+        <a href="#flavors">Flavors</a>
+        <a href="#order">Order</a>
+      </nav>
+      <a href="#order" class="btn btn-primary nav-cta">Order Now</a>
+    </div>
+  </header>
+
+  <!-- Scroll Animation Section Wrapper (sticky canvas container) -->
+  <div class="scroll-anim-wrapper">
+    <!-- Main Canvas Container (Sticky) -->
+    <div class="canvas-container">
+      <canvas id="riceball-canvas"></canvas>
+    </div>
+
+    <!-- Scroll Container containing storytelling sections -->
+    <main class="scroll-container">
+      <!-- Section 1: Hero -->
+      <section id="hero" class="scroll-section hero-section active" data-frame-start="0" data-frame-end="48">
+        <div class="section-content content-center">
+          <div class="badge fade-in-up">Guilt-Free Indulgence</div>
+          <h1 class="main-title fade-in-up">The Perfect <br><span class="gradient-text">Riceball</span></h1>
+          <p class="subtitle fade-in-up">Handcrafted with premium organic grains and authentic Japanese fillings. A healthy, low-calorie snack made to fit your active lifestyle.</p>
+          <div class="scroll-indicator fade-in-up">
+            <div class="mouse-icon">
+              <div class="wheel"></div>
+            </div>
+            <span>Scroll to unwrap</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Ingredients -->
+      <section id="ingredients" class="scroll-section" data-frame-start="49" data-frame-end="96">
+        <div class="section-content content-left">
+          <div class="glass-card">
+            <div class="card-badge">Premium Grains</div>
+            <h2>Only the Finest Ingredients</h2>
+            <p>We source premium organic short-grain Koshihikari rice, seasoned with a precise blend of natural rice vinegar and a touch of sea salt. Crisp Ariake nori seaweed wraps it with a perfect crunch.</p>
+            <ul class="feature-list">
+              <li>
+                <span class="icon">✨</span>
+                <span>100% Organic Japanese Rice</span>
+              </li>
+              <li>
+                <span class="icon">🌊</span>
+                <span>Hand-harvested Toasted Nori</span>
+              </li>
+              <li>
+                <span class="icon">🥬</span>
+                <span>No Artificial Preservatives</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Nutritional Stats -->
+      <section id="nutrients" class="scroll-section" data-frame-start="97" data-frame-end="144">
+        <div class="section-content content-right">
+          <div class="glass-card">
+            <div class="card-badge">Nutrition First</div>
+            <h2>Fuel Your Day, Cleanly</h2>
+            <p>Healthy eating shouldn't be boring or complicated. SlimEats riceballs are carefully portioned to give you clean, sustained energy without the heavy crash.</p>
+            
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="stat-num">180</span>
+                <span class="stat-label">Calories</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-num">8g</span>
+                <span class="stat-label">Protein</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-num">32g</span>
+                <span class="stat-label">Carbs</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-num">2g</span>
+                <span class="stat-label">Fat</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Flavors -->
+      <section id="flavors" class="scroll-section" data-frame-start="145" data-frame-end="192">
+        <div class="section-content content-left">
+          <div class="glass-card">
+            <div class="card-badge">Flavors</div>
+            <h2>Choose Your Filling</h2>
+            <p>Whether you're craving savory, spicy, or vegetarian, we have curated options to satisfy every palate.</p>
+            
+            <div class="flavor-selector">
+              <div class="flavor-option active" data-flavor="salmon">
+                <span class="flavor-dot color-salmon"></span>
+                <div>
+                  <strong>Smoked Salmon Shioyaki</strong>
+                  <p>Traditional salted salmon flakes</p>
+                </div>
+              </div>
+              <div class="flavor-option" data-flavor="tuna">
+                <span class="flavor-dot color-tuna"></span>
+                <div>
+                  <strong>Spicy Mayo Tuna</strong>
+                  <p>Wild tuna with light spicy kewpie mayo</p>
+                </div>
+              </div>
+              <div class="flavor-option" data-flavor="mushroom">
+                <span class="flavor-dot color-mushroom"></span>
+                <div>
+                  <strong>Teriyaki Shiitake (V)</strong>
+                  <p>Slow-braised savory mushrooms</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Order / CTA -->
+      <section id="order" class="scroll-section" data-frame-start="193" data-frame-end="239">
+        <div class="section-content content-center-wide">
+          <div class="glass-card cta-card">
+            <div class="cta-grid">
+              <div class="cta-text">
+                <h2>Ready to bite in?</h2>
+                <p>Experience fresh, handmade Japanese onigiri delivered straight to your door or office. Freshly packed daily.</p>
+                
+                <div class="order-features">
+                  <div class="order-feature">
+                    <span class="of-icon">🛵</span>
+                    <div>
+                      <h4>30-Min Delivery</h4>
+                      <p>Served chilled & crisp</p>
+                    </div>
+                  </div>
+                  <div class="order-feature">
+                    <span class="of-icon">🍱</span>
+                    <div>
+                      <h4>Daily Fresh</h4>
+                      <p>Made every morning at 5 AM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <form class="order-form" onsubmit="event.preventDefault(); alert('Order received! Thank you for choosing SlimEats.');">
+                <h3>Get 20% off your first pack</h3>
+                <p class="form-desc">Enter your email and we'll send you an instant discount code.</p>
+                <div class="form-group">
+                  <input type="text" id="name-input" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                  <input type="email" id="email-input" placeholder="Your Email Address" required>
+                </div>
+                <div class="form-group">
+                  <select id="flavor-input">
+                    <option value="" disabled selected>Select Preferred Flavor</option>
+                    <option value="salmon">Smoked Salmon Shioyaki</option>
+                    <option value="tuna">Spicy Mayo Tuna</option>
+                    <option value="mushroom">Teriyaki Shiitake (V)</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Send Discount Code</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Content Below Scroll Animation (imported from code.html, no navbar, no hero) -->
+  <main class="relative z-10 max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-lg md:py-xl bg-background text-on-surface">
+    <!-- Bento Grid Section: Explore Flavors -->
+    <section class="mb-xl">
+      <div class="flex justify-between items-end mb-md">
+        <div>
+          <h3 class="font-headline-lg text-headline-lg text-on-surface">Explore More Flavors</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">Handcrafted for health, seasoned for soul.</p>
+        </div>
+        <button class="text-primary font-label-md text-label-md flex items-center gap-1 hover:underline">
+          View All <span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+        </button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+        <!-- Flavor Card 1: Smoky BBQ -->
+        <div class="group bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(183,33,25,0.05)] border border-outline-variant/20 hover:shadow-xl transition-all duration-300">
+          <div class="h-48 overflow-hidden">
+            <img alt="Smoky BBQ Rice Ball" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZx6emIrqFINmaF6DfJqrmqCJbPqrpqlPtLw6BeqSvpU74qqDRwZMb3dVTueOA4EjZp84Re4R_aNY2O4sEGy-eRaFwoW4JQH9x_PVfjo1pErGlA3K16I5Y8PLLNRVZVOD8RxRi9tRn27XBn2dKg5mphqeq-_XmU1caqcFKA47Iu3mIpBdbMhk-10nSl4-W21-DkGjNXbYF7bkiauwBEDMbm7CAeMS1AMLqvQORlWD_1bIPqm8z-AUCzCftWqo7JQ92Ygdo5lK2ChZP"/>
+          </div>
+          <div class="p-md space-y-sm bg-surface-container-lowest">
+            <h4 class="font-title-md text-title-md text-on-surface">Smoky BBQ Twist</h4>
+            <p class="font-caption text-caption text-on-surface-variant line-clamp-2">Sweet, savory, and perfectly charred with a core of tangy cheddar.</p>
+            <div class="flex justify-between items-center pt-base">
+              <span class="font-label-md text-label-md font-bold text-on-surface">₹135</span>
+              <button class="p-2 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition-colors">
+                <span class="material-symbols-outlined" data-icon="add">add</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Flavor Card 2: Zesty Lemon Herb -->
+        <div class="group bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(183,33,25,0.05)] border border-outline-variant/20 hover:shadow-xl transition-all duration-300">
+          <div class="h-48 overflow-hidden">
+            <img alt="Lemon Herb Rice Ball" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo-bKialvlAKho5RTteDoc6RNhz2oWH-hY_d3yaiWWy5WY-kB1bVKV9TJzu4YJJ_ekMxweNqfYD83iZoQ91BaFVb-P5DLahklAAWGAvJtg6bIpwTMIgdlLk2tCXDoAmOfuLVRQXnhwwNAhCavwjWKrScn1Pnv40Py-zsn_z1hKRjwV0xkvSAjkrLh2LTP_175PwlAP4-WZFzcjzlbV3U2DgkMf2n7viAu0vDnQoFy5XCn8n_Xr-QaKpthxfmyzsVco966K1hL0EW6Z"/>
+          </div>
+          <div class="p-md space-y-sm bg-surface-container-lowest">
+            <h4 class="font-title-md text-title-md text-on-surface">Zesty Lemon Herb</h4>
+            <p class="font-caption text-caption text-on-surface-variant line-clamp-2">Light, refreshing, and packed with aromatic garden herbs.</p>
+            <div class="flex justify-between items-center pt-base">
+              <span class="font-label-md text-label-md font-bold text-on-surface">₹125</span>
+              <button class="p-2 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition-colors">
+                <span class="material-symbols-outlined" data-icon="add">add</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Flavor Card 3: Classic Cheesy Gold -->
+        <div class="group bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(183,33,25,0.05)] border border-outline-variant/20 hover:shadow-xl transition-all duration-300">
+          <div class="h-48 overflow-hidden">
+            <img alt="Cheesy Gold Rice Ball" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmnmFt1EeHgNr9ezExZH641SUS2Xora8HgT0PGSDpYwkJpxXwpfhFg1oLPC4PiuhAIUT6vBeS7b6-YQrOKO1Nb_zKqg4w9cJyGOOdc0Lah7ITcpuP_4-iR-PnbNxp7n9Sts7ban3hpwTdY9vpePqnRoBiUj_Wr2XPtXsYZxQi85_CKru4gDeWjR42fkTW9A8Ol98S0uGb8lo-3VbX4S-JjmMlrhCCrXHFK-OnHnCZTY4aSY1qAUnZCL2dxwEc5p-YM-riw2pi-F-71"/>
+          </div>
+          <div class="p-md space-y-sm bg-surface-container-lowest">
+            <h4 class="font-title-md text-title-md text-on-surface">Classic Cheesy Gold</h4>
+            <p class="font-caption text-caption text-on-surface-variant line-clamp-2">Triple cheese blend wrapped in golden baked shirataki grains.</p>
+            <div class="flex justify-between items-center pt-base">
+              <span class="font-label-md text-label-md font-bold text-on-surface">₹145</span>
+              <button class="p-2 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition-colors">
+                <span class="material-symbols-outlined" data-icon="add">add</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ingredients Transparency Section -->
+    <section class="bg-surface-container rounded-3xl p-lg mb-xl relative overflow-hidden border border-outline-variant/15">
+      <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-lg items-center">
+        <div class="space-y-md">
+          <h3 class="font-headline-lg text-headline-lg text-on-surface">Transparency in every grain.</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">We believe you should know exactly what powers your body. No fillers, no junk—just clean, wholesome ingredients sourced with care.</p>
+          <ul class="space-y-sm">
+            <li class="flex items-start gap-sm">
+              <div class="p-2 rounded-lg bg-primary/10 text-primary">
+                <span class="material-symbols-outlined" data-icon="spa">spa</span>
+              </div>
+              <div>
+                <span class="font-title-md text-label-md block text-on-surface">Premium Shirataki Rice</span>
+                <span class="font-body-md text-caption text-on-surface-variant">Zero-calorie plant-based base for high satiety.</span>
+              </div>
+            </li>
+            <li class="flex items-start gap-sm">
+              <div class="p-2 rounded-lg bg-secondary-container/20 text-secondary">
+                <span class="material-symbols-outlined" data-icon="grain">grain</span>
+              </div>
+              <div>
+                <span class="font-title-md text-label-md block text-on-surface">Whole Grain Oats</span>
+                <span class="font-body-md text-caption text-on-surface-variant">Providing sustained energy release throughout the day.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="grid grid-cols-2 gap-md">
+          <div class="aspect-square bg-surface-container-lowest rounded-2xl p-md flex flex-col justify-center items-center text-center space-y-xs shadow-sm border border-outline-variant/10">
+            <span class="font-headline-lg text-primary">75%</span>
+            <span class="font-label-md text-caption uppercase tracking-wider text-on-surface-variant">Shirataki</span>
+          </div>
+          <div class="aspect-square bg-surface-container-lowest rounded-2xl p-md flex flex-col justify-center items-center text-center space-y-xs shadow-sm border border-outline-variant/10">
+            <span class="font-headline-lg text-primary">15%</span>
+            <span class="font-label-md text-caption uppercase tracking-wider text-on-surface-variant">Oats</span>
+          </div>
+          <div class="aspect-square bg-surface-container-lowest rounded-2xl p-md flex flex-col justify-center items-center text-center space-y-xs shadow-sm border border-outline-variant/10">
+            <span class="font-headline-lg text-primary">0%</span>
+            <span class="font-label-md text-caption uppercase tracking-wider text-on-surface-variant">Refined Carbs</span>
+          </div>
+          <div class="aspect-square bg-surface-container-lowest rounded-2xl p-md flex flex-col justify-center items-center text-center space-y-xs shadow-sm border border-outline-variant/10">
+            <span class="font-headline-lg text-primary">100%</span>
+            <span class="font-label-md text-caption uppercase tracking-wider text-on-surface-variant">Natural</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Desktop Footer Space (from code.html) -->
+  <footer class="hidden md:block py-xl bg-surface-container-high/30 mt-xl px-margin-desktop border-t border-outline-variant/10 relative z-10">
+    <div class="max-w-[1280px] mx-auto grid grid-cols-4 gap-lg">
+      <div class="space-y-md">
+        <h2 class="font-headline-lg-mobile text-headline-lg-mobile font-black text-primary">SLIMEATS</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">The modern snack for the modern professional. Wholesome, energetic, and unapologetically delicious.</p>
+      </div>
+      <div class="space-y-sm">
+        <h5 class="font-label-md text-label-md text-on-surface font-bold">Quick Links</h5>
+        <ul class="space-y-xs font-body-md text-body-md text-on-surface-variant">
+          <li><a class="hover:text-primary transition-colors" href="#">Find a Store</a></li>
+          <li><a class="hover:text-primary transition-colors" href="#">Nutritional Guide</a></li>
+          <li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div class="space-y-sm">
+        <h5 class="font-label-md text-label-md text-on-surface font-bold">Customer Care</h5>
+        <ul class="space-y-xs font-body-md text-body-md text-on-surface-variant">
+          <li><a class="hover:text-primary transition-colors" href="#">Shipping Policy</a></li>
+          <li><a class="hover:text-primary transition-colors" href="#">Track Order</a></li>
+          <li><a class="hover:text-primary transition-colors" href="#">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="space-y-md">
+        <h5 class="font-label-md text-label-md text-on-surface font-bold">Join the Movement</h5>
+        <div class="flex gap-2">
+          <input class="bg-surface-container-low border border-outline-variant rounded-lg p-2 flex-grow focus:border-primary outline-none text-body-md" placeholder="Your Email" type="email"/>
+          <button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-bold">Join</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Copyright & Founder Info -->
+  <div class="w-full py-6 bg-surface-container-high/20 text-center font-body-md text-caption text-on-surface-variant relative z-10 border-t border-outline-variant/10 pb-24 md:pb-6">
+    <div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop">
+      <p>Founder: Divyansh Pratap Singh | &copy; 2026 SlimEats Inc. All rights reserved.</p>
+    </div>
+  </div>
+
+  <!-- BottomNavBar Mobile (from code.html) -->
+  <nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center py-base px-2 bg-surface border-t border-outline-variant/10 pb-safe shadow-[0px_-4px_20px_rgba(183,33,25,0.05)]">
+    <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-lg" href="#">
+      <span class="material-symbols-outlined" data-icon="home">home</span>
+      <span class="font-label-md text-label-md">Home</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-primary font-bold hover:bg-surface-container-low transition-colors p-2 rounded-lg active:scale-90 transition-transform duration-200" href="#">
+      <span class="material-symbols-outlined" data-icon="restaurant_menu" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+      <span class="font-label-md text-label-md">Flavors</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-lg" href="#">
+      <span class="material-symbols-outlined" data-icon="local_fire_department">local_fire_department</span>
+      <span class="font-label-md text-label-md">Track</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-lg" href="#">
+      <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+      <span class="font-label-md text-label-md">Cart</span>
+    </a>
+  </nav>
+
+  <!-- JS Logic Script -->
+  <script type="module" src="/main.js"></script>
+</body>
+</html>
