@@ -3,6 +3,20 @@
 document.addEventListener('DOMContentLoaded', () => {
   const totalFrames = 240;
   const images = [];
+  
+  // Mobile Optimization Configuration
+  const isMobile = window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const frameStep = isMobile ? 2 : 1; // Load every 2nd frame on mobile to save memory and network
+  const mobileScale = 0.35; // Downscale canvas dimensions by 0.35 on mobile
+  
+  // Calculate which frames to load
+  const framesToLoad = [];
+  for (let i = 1; i <= totalFrames; i++) {
+    if (!isMobile || (i - 1) % frameStep === 0 || i === totalFrames) {
+      framesToLoad.push(i);
+    }
+  }
+  const totalFramesToLoad = framesToLoad.length;
   let loadedCount = 0;
   
   // DOM Elements
@@ -35,11 +49,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
     
+    // Scale crop coordinates according to the actual width of the loaded frame compared to 1920
+    const scaleFactor = img.width / 1920;
+    
     // Crop coordinates to exclude the black margins and watermark on the sides (X: 150 to 1770)
-    const cropX = 150;
+    const cropX = 150 * scaleFactor;
     const cropY = 0;
-    const cropWidth = 1620; // 1770 - 150 (perfect 3:2 content box)
-    const cropHeight = 1080;
+    const cropWidth = 1620 * scaleFactor; // 1770 - 150 (perfect 3:2 content box)
+    const cropHeight = 1080 * scaleFactor;
     
     // Cover calculation using the cropped content region
     const hRatio = canvasWidth / cropWidth;
@@ -74,25 +91,38 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Draw current frame immediately
     const roundFrame = Math.round(currentFrameIndex);
-    if (images[roundFrame]) {
-      drawFrame(images[roundFrame]);
+    let targetIndex = roundFrame;
+    if (isMobile) {
+      const stepIndex = Math.round(roundFrame / frameStep) * frameStep;
+      targetIndex = Math.max(0, Math.min(totalFrames - 1, stepIndex));
+      if (Math.abs(totalFrames - 1 - roundFrame) < Math.abs(targetIndex - roundFrame)) {
+        targetIndex = totalFrames - 1;
+      }
+    }
+    if (images[targetIndex]) {
+      drawFrame(images[targetIndex]);
     }
   }
 
   // Pre-process image to remove black background (close to 0,0,0) and make it transparent
-  function makeImageTransparent(img) {
+  function makeImageTransparent(img, downscale = false) {
     return new Promise((resolve) => {
       const process = () => {
         const offscreenCanvas = document.createElement('canvas');
         const offscreenContext = offscreenCanvas.getContext('2d');
         
-        const width = img.naturalWidth || img.width;
-        const height = img.naturalHeight || img.height;
+        let width = img.naturalWidth || img.width;
+        let height = img.naturalHeight || img.height;
+        
+        if (downscale) {
+          width = Math.round(width * mobileScale);
+          height = Math.round(height * mobileScale);
+        }
         
         offscreenCanvas.width = width;
         offscreenCanvas.height = height;
         
-        offscreenContext.drawImage(img, 0, 0);
+        offscreenContext.drawImage(img, 0, 0, width, height);
         
         const imageData = offscreenContext.getImageData(0, 0, width, height);
         const data = imageData.data;
@@ -120,26 +150,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Preload and transparent-key all 240 image frames
+  // Preload and transparent-key all required image frames
   function preloadImages() {
     return new Promise((resolve) => {
-      for (let i = 1; i <= totalFrames; i++) {
+      framesToLoad.forEach((frameIndex) => {
         const img = new Image();
-        img.src = getFramePath(i);
+        img.src = getFramePath(frameIndex);
         
         img.onload = async () => {
-          // Key out black background offscreen
-          const transparentCanvas = await makeImageTransparent(img);
-          images[i - 1] = transparentCanvas;
+          // Key out black background offscreen, and downscale if mobile
+          const transparentCanvas = await makeImageTransparent(img, isMobile);
+          images[frameIndex - 1] = transparentCanvas;
           
           loadedCount++;
-          const percentage = Math.round((loadedCount / totalFrames) * 100);
+          const percentage = Math.round((loadedCount / totalFramesToLoad) * 100);
           
           // Update loader UI
           if (loaderBar) loaderBar.style.width = `${percentage}%`;
           if (loaderText) loaderText.textContent = `Preparing fresh ingredients... ${percentage}%`;
           
-          if (loadedCount === totalFrames) {
+          if (loadedCount === totalFramesToLoad) {
             // Loader is fully done
             setTimeout(() => {
               if (loader) loader.classList.add('loaded');
@@ -151,11 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
         img.onerror = () => {
           console.error(`Failed to load frame: ${img.src}`);
           loadedCount++;
-          if (loadedCount === totalFrames) {
+          if (loadedCount === totalFramesToLoad) {
             resolve();
           }
         };
-      }
+      });
     });
   }
 
@@ -192,9 +222,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const currentFrameRounded = Math.round(currentFrameIndex);
+    let targetIndex = currentFrameRounded;
+    if (isMobile) {
+      const stepIndex = Math.round(currentFrameRounded / frameStep) * frameStep;
+      targetIndex = Math.max(0, Math.min(totalFrames - 1, stepIndex));
+      if (Math.abs(totalFrames - 1 - currentFrameRounded) < Math.abs(targetIndex - currentFrameRounded)) {
+        targetIndex = totalFrames - 1;
+      }
+    }
     
-    if (images[currentFrameRounded]) {
-      drawFrame(images[currentFrameRounded]);
+    if (images[targetIndex]) {
+      drawFrame(images[targetIndex]);
     }
     
     // Update scroll progress bar width relative to the scroll animation wrapper
